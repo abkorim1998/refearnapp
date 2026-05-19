@@ -46,6 +46,7 @@ export default {
 			'/sitemap-index.xml',
 			'/sitemap-0.xml',
 			'/sitemap.xml',
+			'/llms.txt',
 		];
 		const isNextAsset = url.pathname.startsWith('/_next/');
 		const isStaticImage = /\.(png|jpg|jpeg|gif|webp|svg|ico)$/i.test(url.pathname);

@@ -1,8 +1,9 @@
 ---
+// apps/landing-page/src/pages/blog/[slug].astro
 import BlogLayout from '../../layouts/BlogLayout.astro';
 import PricingCTA from '../../components/blog/PricingCTA';
 import Footer from '../../components/Footer.astro';
-import { getLocalBlogPosts } from '../../utils/blog'; // 👈 Import fetcher
+import { getLocalBlogPosts } from '../../utils/blog';
 
 export async function getStaticPaths() {
   const posts = await getLocalBlogPosts();
@@ -13,7 +14,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const Content = entry.Content; // 👈 Extract component directly
+const Content = entry.Content;
 const headings = entry.headings;
 
 const sections = headings
@@ -24,27 +25,68 @@ const sections = headings
     level: h.depth,
   }));
 
-const CDN_URL = 'https://assets.refearnapp.com';
+const extension = entry.data.imageExt || 'png';
+const autoHeroImage = `/blog-assets/${entry.data.image}/hero.${extension}`;
+
+// Safely retrieve tags if they exist in frontmatter
+const tags = entry.data.tags || [];
 ---
 
 <BlogLayout title={`${entry.data.title} | RefearnApp`} sections={sections}>
+  <!-- Back to Blog Button -->
+  <div class="mb-6">
+    <a
+      href="/blog"
+      class="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors group"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2.5"
+        stroke="currentColor"
+        class="h-4 w-4 transform transition-transform group-hover:-translate-x-1"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+      Back to blog
+    </a>
+  </div>
+
   <header class="mb-10">
+    <!-- Dynamic Article Tags -->
+    {tags.length > 0 && (
+      <div class="mb-3 flex flex-wrap gap-2">
+        {tags.map((tag: string) => (
+          <span class="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-1 text-xs font-bold text-indigo-700 uppercase tracking-wider border border-indigo-100">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+
     <h1 class="mb-2 text-2xl font-black text-slate-900 sm:text-4xl">
       {entry.data.title}
     </h1>
-    <time class="text-sm font-medium text-slate-500">{entry.data.date}</time>
+    <time class="text-sm font-medium text-slate-500">
+      {new Date(entry.data.date).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      })}
+    </time>
   </header>
 
   <div class="mb-16 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 shadow-sm">
     <img
-      src={`${CDN_URL}${entry.data.image}`}
+      src={autoHeroImage}
       alt={entry.data.title}
       class="block aspect-video h-auto w-full object-cover"
     />
   </div>
 
   <div class="prose prose-slate prose-indigo max-w-none">
-    <Content /> <!-- 👈 Render native element seamlessly -->
+    <Content />
   </div>
 </BlogLayout>
 

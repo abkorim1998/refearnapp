@@ -4,16 +4,14 @@ interface BlogCardProps {
   title: string;
   date: string;
   slug: string;
-  image: string;
-  cdnUrl: string;
+  image: string
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({
   title,
   date,
   slug,
-  image,
-  cdnUrl,
+  image
 }) => {
   return (
     <article className="group h-full">
@@ -24,7 +22,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
         {/* Top: Image Section - Full Bleed (No Padding) */}
         <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-slate-100">
           <img
-            src={`${cdnUrl}${image}`}
+            src={image}
             alt={title}
             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
             loading="lazy"

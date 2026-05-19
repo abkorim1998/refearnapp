@@ -2,7 +2,9 @@
 title: "How to Build an Affiliate Program in Next.js (The Clean Way)"
 description: "Skip the $100/month SaaS tax. Here's how to capture referral params, persist them in cookies, pass them to Stripe, and self-host your entire affiliate infrastructure with RefearnApp."
 date: "2026-05-18"
-image: "/blog/affiliate-program-nextjs.png"
+image: "affiliate-program-nextjs"
+imageExt: "jpg"
+tags: ["Tutorial", "Next.js", "Stripe"]
 ---
 
 import CodeBlock from '../../components/blog/CodeBlock.astro';
@@ -391,35 +393,52 @@ const stripe = new Stripe(
 
 <hr class="border-slate-200" />
 
-<section id="conclusion" class="scroll-mt-28 space-y-4">
+<section id="conclusion" class="scroll-mt-28 space-y-6">
 
   <h2 class="text-3xl font-black tracking-tight text-slate-900 mt-12 mb-6">
     Conclusion & Next Steps
   </h2>
 
   <p>
-    Clone RefearnApp and mount your platform dashboard
-    in under five minutes:
+    Building an affiliate system doesn't mean writing complex tracking matrices from scratch or paying heavy SaaS platform taxes. By managing the param edge directly via middleware, you maintain ultra-low latency execution over your conversion funnels.
+  </p>
+
+  <p>
+    To start managing your payouts, monitoring referral lifecycles, and scaling custom multi-tenant affiliate portals without monthly limits, <strong>fork the repository to your own GitHub account</strong> and clone your personal fork:
   </p>
 
   <CodeBlock
     lang="bash"
-    code={`git clone https://github.com/ZAK123DSFDF/refearnapp
+    code={`# Clone your personal forked repository
+git clone https://github.com/your-username/refearnapp
 cd refearnapp
 
-        cp .env.example .env
+# Set up local environment variables
+cp .env.example .env
 
-        pnpm install
-        pnpm dev`}
+# Boot up the development server
+pnpm install
+pnpm dev`}
   />
 
-  <p>
+  <div class="pt-4 flex flex-col sm:flex-row items-center gap-4">
     <a
       href="https://github.com/ZAK123DSFDF/refearnapp"
-      class="font-semibold text-indigo-600 hover:text-indigo-500"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-md shadow-indigo-500/10 transition-colors hover:bg-indigo-500"
     >
-      → Star and clone on GitHub
+      Fork on GitHub
     </a>
-  </p>
+
+    <a
+      href="https://github.com/ZAK123DSFDF/refearnapp"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center text-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors"
+    >
+      Star Repository →
+    </a>
+  </div>
 
 </section>

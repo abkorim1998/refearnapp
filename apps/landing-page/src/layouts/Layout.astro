@@ -28,6 +28,7 @@ const socialImageURL = `${siteUrl}/${cleanImagePath}`; // Manually add exactly o
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <link rel="canonical" href={new URL(Astro.url.pathname, siteUrl).href} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <script src="https://script.supademo.com/supademo.js" is:inline></script>
     <script
       defer

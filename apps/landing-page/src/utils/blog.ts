@@ -5,6 +5,8 @@ export interface BlogPost {
     description: string;
     date: string;
     image: string;
+    imageExt?: string;
+    tags?: string[]; // 👈 Add this line to make tags type-safe (optional array of strings)
   };
   Content: any;
   headings: Array<{ depth: number; slug: string; text: string }>;

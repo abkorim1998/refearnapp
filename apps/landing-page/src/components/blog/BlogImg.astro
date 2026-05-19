@@ -1,0 +1,19 @@
+---
+// src/components/blog/BlogImg.astro
+interface Props {
+  post: string;
+  num: string;
+  alt: string;
+  ext?: string;
+}
+
+const { post, num, alt, ext = 'png' } = Astro.props;
+const srcPath = `/blog-assets/${post}/${num}.${ext}`;
+---
+
+<img
+  src={srcPath}
+  alt={alt}
+  class="mx-auto rounded-xl border border-slate-200 shadow-md my-8 block aspect-video object-cover"
+  loading="lazy"
+/>

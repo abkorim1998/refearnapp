@@ -17,3 +17,4 @@ Disallow: /api/
 # Explicitly allow Twitterbot to see everything for link previews
 User-agent: Twitterbot
 Allow: /
+Sitemap: https://refearnapp.com/sitemap-index.xml

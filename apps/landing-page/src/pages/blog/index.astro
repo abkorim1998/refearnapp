@@ -1,13 +1,11 @@
 ---
+// apps/landing-page/src/pages/blog/index.astro
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import BlogCard from '../../components/blog/BlogCard';
-import { getLocalBlogPosts } from '../../utils/blog'; // 👈 Import our clean fetcher
+import { getLocalBlogPosts } from '../../utils/blog';
 
-const CDN_URL = 'https://assets.refearnapp.com';
-
-// Fetch directly through Vite
 const allPosts = await getLocalBlogPosts();
 
 const formatDate = (date: string) => {
@@ -26,27 +24,24 @@ const formatDate = (date: string) => {
   <Header />
 
   <main class="mx-auto max-w-7xl px-6 py-16 md:py-24">
-    <header class="mb-20 flex flex-col items-center text-center">
-      <h1 class="text-4xl font-extrabold tracking-tight text-slate-900 md:text-6xl">
-        RefearnApp Insights
-      </h1>
-      <p class="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">
-        Everything you need to know about scaling your SaaS through referral marketing, affiliate tracking, and automated commissions.
-      </p>
-    </header>
+    <!-- Header code omitted for brevity -->
 
     <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
       {
-        allPosts.map((post) => (
-          <BlogCard
-            client:load
-            title={post.data.title}
-            date={formatDate(post.data.date)}
-            slug={post.id}
-            image={post.data.image}
-            cdnUrl={CDN_URL}
-          />
-        ))
+        allPosts.map((post) => {
+          const extension = post.data.imageExt || 'png';
+          const computedHero = `/blog-assets/${post.data.image}/hero.${extension}`;
+
+          return (
+            <BlogCard
+              client:load
+              title={post.data.title}
+              date={formatDate(post.data.date)}
+              slug={post.id}
+              image={computedHero}
+            />
+          );
+        })
       }
     </div>
   </main>

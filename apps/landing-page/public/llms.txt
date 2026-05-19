@@ -1,0 +1,14 @@
+# RefearnApp
+
+> Self-hostable, open-source affiliate management and tracking software designed for modern indie hackers and B2B SaaS platforms.
+
+## Core Information
+- [RefearnApp Homepage](https://refearnapp.com/): The main landing page outlining features, data sovereignty advantages, and self-hosting capabilities.
+- [Documentation](https://refearnapp.com/docs): Comprehensive guides on how to install, configure, and self-host RefearnApp via Docker or dynamic environments.
+- [GitHub Repository](https://github.com/ZAK123DSFDF/refearnapp): The official open-source repository for RefearnApp setup, tracking scripts, and contribution guidelines.
+
+## Features & Ecosystem
+- [Pricing & Self-Hosting](https://refearnapp.com/#pricing): Overview of our open-source license, community support, and managed hosting alternatives.
+
+## Optional
+- [Blog](https://refearnapp.com/blog): Insights on building in public, bootstrapping B2B software, and optimizing affiliate marketing channels.
