@@ -38,6 +38,29 @@ const onSuccess = async (email: string) => {
 };`,
       },
       {
+        name: "TanStack Start",
+        description:
+          "Call the tracking function inside your client side signup router handlers or component logic.",
+        language: "tsx",
+        code: `// 1. Install the package
+// npm install @refearnapp/js
+
+import { initRefearnapp, trackSignup } from "@refearnapp/js";
+
+// 2. Initialize (e.g., inside your src/routes/__root.tsx component or main entry point)
+if (typeof window !== "undefined") {
+  initRefearnapp("${origin}");
+}
+
+// 3. Track during submission on the client side
+const handleSignupSubmit = async (email: string) => {
+  const result = await trackSignup(email);
+  if (result.success) {
+    console.log("Conversion registered!");
+  }
+};`,
+      },
+      {
         name: "Vue",
         description: "Import the tracking functions into your Vue components.",
         language: "javascript",

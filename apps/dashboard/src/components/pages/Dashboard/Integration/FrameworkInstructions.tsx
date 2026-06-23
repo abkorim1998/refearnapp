@@ -31,25 +31,42 @@ export default function FrameworkInstructions() {
       {
         name: "Next.js",
         description:
-          "Place the script using the built-in next/script component...",
+          "Place the script using the built-in next/script component inside your root layout:",
         code: `<Script src="${url}" />`,
         language: "tsx",
       },
       {
+        name: "TanStack Start",
+        description:
+          "Add the script configuration directly to the scripts array in your root route selector (src/routes/__root.tsx):",
+        code: `export const Route = createRootRoute({
+  head: () => ({
+    scripts: [
+      {
+        src: '${url}',
+        async: true,
+      },
+    ],
+  }),
+})`,
+        language: "tsx",
+      },
+      {
         name: "React",
-        description: "Insert this inside your main HTML template...",
+        description:
+          "Insert this inside your main HTML template index.html header:",
         code: `<script src="${url}"></script>`,
         language: "html",
       },
       {
         name: "Vue",
-        description: "Add the script to your public/index.html file...",
+        description: "Add the script to your public/index.html file template:",
         code: `<script src="${url}"></script>`,
         language: "html",
       },
       {
         name: "Svelte / SvelteKit",
-        description: "Place this in the HTML template...",
+        description: "Place this in your app.html root template template:",
         code: `<script src="${url}"></script>`,
         language: "html",
       },

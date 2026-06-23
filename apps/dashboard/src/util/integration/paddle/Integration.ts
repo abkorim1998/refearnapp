@@ -240,7 +240,66 @@ export async function GET(req: Request) {
   return NextResponse.json({ txn });
 }
 `,
+  tanstack_serverFn: `// TanStack Start Server Function
+// src/app/serverFunctions/checkout.ts
 
+import { createServerFn } from "@tanstack/start";
+import { getWebRequest } from "@tanstack/start/server";
+import { Environment, Paddle } from "@paddle/paddle-node-sdk";
+
+const paddle = new Paddle(process.env.NEXT_PUBLIC_PADDLE_VENDOR_ID!, {
+  environment: Environment.sandbox,
+});
+
+export const createCheckoutTxn = createServerFn({ method: "POST" })
+  .handler(async () => {
+    const request = getWebRequest();
+    const cookieHeader = request?.headers.get("cookie") || "";
+    const cookies = Object.fromEntries(
+      cookieHeader.split("; ").map((c) => c.split("="))
+    );
+    const affiliateCookie = cookies["refearnapp_affiliate_cookie"];
+
+    const txn = await paddle.transactions.create({
+      items: [{ quantity: 1, priceId: "pri_XXX" }],
+      customData: {
+        refearnapp_affiliate_code: affiliateCookie
+          ? decodeURIComponent(affiliateCookie)
+          : null,
+      },
+    });
+
+    return { txn };
+  });`,
+  tanstack_apiRoutes: `// TanStack Start API Route
+// src/routes/api/checkout.ts
+
+import { createAPIFileRoute } from "@tanstack/start/api";
+import { getCookie } from "vinxi/http";
+import { Environment, Paddle } from "@paddle/paddle-node-sdk";
+
+const paddle = new Paddle(process.env.NEXT_PUBLIC_PADDLE_VENDOR_ID!, {
+  environment: Environment.sandbox,
+});
+
+export const Route = createAPIFileRoute("/api/checkout")({
+  POST: async ({ request }) => {
+    const affiliate = getCookie(request, "refearnapp_affiliate_cookie");
+
+    const txn = await paddle.transactions.create({
+      items: [{ quantity: 1, priceId: "pri_XXX" }],
+      customData: {
+        refearnapp_affiliate_code: affiliate
+          ? decodeURIComponent(affiliate)
+          : null,
+      },
+    });
+
+    return new Response(JSON.stringify({ txn }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  },
+});`,
   express: `// Express Server Example
 const paddle = new Paddle(process.env.NEXT_PUBLIC_PADDLE_VENDOR_ID!, {
   environment: Environment.sandbox,
@@ -326,6 +385,8 @@ export default defineEventHandler(async (event) => {
 export const serverLabels = {
   Nextjs_serverAction: "Next.js Server Action",
   Nextjs_apiRoutes: "Next.js API Routes",
+  tanstack_serverFn: "TanStack Server Fn",
+  tanstack_apiRoutes: "TanStack API Route",
   express: "Express",
   sveltekit: "SvelteKit",
   nuxt: "Nuxt",

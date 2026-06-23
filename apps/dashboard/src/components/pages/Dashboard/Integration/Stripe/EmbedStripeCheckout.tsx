@@ -13,7 +13,6 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select"
-import { Info } from "lucide-react"
 import { InfoCard } from "@/components/ui-custom/InfoCard"
 
 const EmbedStripeCheckout = () => {
@@ -74,6 +73,74 @@ export async function POST() {
 
   return Response.json({ url: session.url });
 }`,
+    tanstack_serverFn: `// TanStack Start Server Function
+// src/app/serverFunctions/checkout.ts
+
+import { createServerFn } from "@tanstack/start";
+import { getWebRequest } from "@tanstack/start/server";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2025-04-30.basil",
+});
+
+export const createCheckoutSession = createServerFn({ method: "POST" })
+  .handler(async () => {
+    const request = getWebRequest();
+    // Parse the cookie safely out of the web request headers
+    const cookieHeader = request?.headers.get("cookie") || "";
+    const cookies = Object.fromEntries(
+      cookieHeader.split("; ").map((c) => c.split("="))
+    );
+    const affiliateCookie = cookies["refearnapp_affiliate_cookie"];
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: [{ price: "price_xxx", quantity: 1 }],
+      success_url: "https://your-site.com/success",
+      cancel_url: "https://your-site.com/cancel",
+      metadata: {
+        refearnapp_affiliate_code: affiliateCookie
+          ? decodeURIComponent(affiliateCookie)
+          : null,
+      },
+    });
+
+    return { url: session.url };
+  });`,
+    tanstack_apiRoutes: `// TanStack Start API Route
+// src/routes/api/checkout.ts
+
+import { createAPIFileRoute } from "@tanstack/start/api";
+import { getCookie } from "vinxi/http";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2025-04-30.basil",
+});
+
+export const Route = createAPIFileRoute("/api/checkout")({
+  GET: async ({ request }) => {
+    // Vinxi provides ultra-fast direct event context handlers
+    const affiliate = getCookie(request, "refearnapp_affiliate_cookie");
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: [{ price: "price_xxx", quantity: 1 }],
+      success_url: "https://your-site.com/success",
+      cancel_url: "https://your-site.com/cancel",
+      metadata: {
+        refearnapp_affiliate_code: affiliate
+          ? decodeURIComponent(affiliate)
+          : null,
+      },
+    });
+
+    return new Response(JSON.stringify({ url: session.url }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  },
+});`,
     express: `// Express Server Example
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -149,6 +216,8 @@ export default defineEventHandler(async (event) => {
   const labels = {
     Nextjs_serverAction: "Next.js Server Action",
     Nextjs_apiRoutes: "Next.js API Routes",
+    tanstack_serverFn: "TanStack Server Fn",
+    tanstack_apiRoutes: "TanStack API Route",
     express: "Express",
     sveltekit: "SvelteKit",
     nuxt: "Nuxt",
