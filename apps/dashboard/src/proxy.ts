@@ -8,12 +8,15 @@ export async function proxy(req: NextRequest) {
   const host = req.headers.get("host")
   if (!host) return NextResponse.next()
 
+  // Extract hostname (strip port for local testing, e.g. partners.localhost:3000 -> partners.localhost)
+  const hostname = host.split(":")[0]
+
   // 🚫 Skip platform / dev / vercel
   if (
-    isReservedDomain(host) ||
-    host.endsWith(".vercel.app") ||
-    host.startsWith("localhost:3000") ||
-    host.startsWith("127.0.0.1")
+    isReservedDomain(hostname) ||
+    hostname.endsWith(".vercel.app") ||
+    hostname === "localhost" ||
+    hostname === "127.0.0.1"
   ) {
     return NextResponse.next()
   }
@@ -27,7 +30,7 @@ export async function proxy(req: NextRequest) {
       isPrimary: websiteDomain.isPrimary,
     })
     .from(websiteDomain)
-    .where(eq(websiteDomain.domainName, host))
+    .where(eq(websiteDomain.domainName, hostname))
     .limit(1)
 
   // ❌ Unknown domain
@@ -70,6 +73,11 @@ export async function proxy(req: NextRequest) {
    */
   if (!domain.isActive) {
     return NextResponse.rewrite(new URL("/404", req.url))
+  }
+
+  // 🚫 Skip rewriting if the path already starts with /affiliate
+  if (req.nextUrl.pathname.startsWith("/affiliate")) {
+    return NextResponse.next()
   }
 
   /**

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 type DropdownInputProps = {
   label: string
   value: string
-  options: { label: string; value: string }[]
+  options: { label: string; value: string; image?: string | null }[]
   onChange?: (val: string) => void
   disabled?: boolean
   placeholder?: string
@@ -39,7 +39,7 @@ export const DropdownInput = ({
   includeFooter = false,
   onFooterClick,
 }: DropdownInputProps) => (
-  <div className="space-y-1">
+  <div className="space-y-1 w-full">
     <Label className="text-xs font-medium">{label}</Label>
     <Select
       value={value}
@@ -58,7 +58,16 @@ export const DropdownInput = ({
       <SelectContent affiliate={false}>
         {options.map((opt) => (
           <SelectItem affiliate={false} key={opt.value} value={opt.value}>
-            {opt.label}
+            <div className="flex items-center space-x-2">
+              {opt.image ? (
+                <img src={opt.image} alt={opt.label} className="w-5 h-5 rounded object-cover" />
+              ) : (
+                <div className="w-5 h-5 rounded bg-primary/10 border border-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">
+                  {opt.label.charAt(0).toUpperCase()}
+                </div>
+              )}
+              <span className="truncate">{opt.label}</span>
+            </div>
           </SelectItem>
         ))}
         {includeFooter && (

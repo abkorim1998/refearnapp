@@ -12,8 +12,12 @@ export function useAffiliatePath(orgId?: string) {
     if (typeof window !== "undefined") {
       const currentBase = `${window.location.protocol}//${window.location.host}`
       const host = window.location.host
+      const hostname = host.split(":")[0]
       const mainHost =
-        host.includes("localhost:3000") || host === "refearnapp.com"
+        hostname === "localhost" ||
+        hostname === "127.0.0.1" ||
+        hostname === "refearnapp.com" ||
+        hostname === "www.refearnapp.com"
 
       setBaseUrl(currentBase)
       setIsMainHost(mainHost)

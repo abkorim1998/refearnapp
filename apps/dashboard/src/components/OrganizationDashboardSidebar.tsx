@@ -61,7 +61,7 @@ import { SidebarDiscord } from "@/components/ui-custom/Sidebar/SidebarDiscord"
 type Props = {
   orgId?: string
   plan: PlanInfo
-  orgs: { id: string; name: string }[]
+  orgs: { id: string; name: string; logoUrl?: string | null }[]
   UserData: OrganizationData | null
   updateInfo?: { isNewer: boolean; latestVersion: string; url: string } | null
   license: UserLicense | null
@@ -271,7 +271,7 @@ const OrganizationDashboardSidebar = ({
     <Sidebar>
       <SidebarHeader className="flex items-center justify-center py-4">
         <OrgHeader affiliate={false} isPreview={false} noRedirect />
-        <div className="flex items-center space-x-2">
+        <div className="w-full px-0 mt-2">
           {/* Org dropdown */}
           <DropdownInput
             label=""
@@ -279,9 +279,10 @@ const OrganizationDashboardSidebar = ({
             options={orgs.map((org) => ({
               label: org.name,
               value: org.id,
+              image: org.logoUrl,
             }))}
             placeholder="No Org"
-            width="w-40"
+            width="w-full"
             onChange={(val) => switchOrg(val)}
             disabled={orgs.length === 0 || isPending}
             includeFooter
@@ -368,7 +369,7 @@ const OrganizationDashboardSidebar = ({
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
-        <SidebarGroup className="mt-auto border-t border-border/40 pt-4">
+        {/* <SidebarGroup className="mt-auto border-t border-border/40 pt-4">
           <div className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">
             Account & Support
           </div>
@@ -397,7 +398,7 @@ const OrganizationDashboardSidebar = ({
               </div>
             </div>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
       </SidebarContent>
 
       <SidebarFooter className="p-4 space-y-2">
